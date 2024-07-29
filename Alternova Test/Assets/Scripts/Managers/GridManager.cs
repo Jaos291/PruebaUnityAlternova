@@ -38,6 +38,7 @@ public class GridManager : MonoBehaviour
     {
         startTime = Time.time;
         LoadBlocksFromJson();
+        ShuffleBlocks();
         GenerateGrid();
     }
 
@@ -52,6 +53,30 @@ public class GridManager : MonoBehaviour
         else
         {
             Debug.LogError("Cannot find blocks.json file!");
+        }
+    }
+
+    void ShuffleBlocks()
+    {
+        List<int> numbers = new List<int>();
+        foreach (Block block in blockList.blocks)
+        {
+            numbers.Add(block.number);
+        }
+
+
+        for (int i = 0; i < numbers.Count; i++)
+        {
+            int temp = numbers[i];
+            int randomIndex = Random.Range(i, numbers.Count);
+            numbers[i] = numbers[randomIndex];
+            numbers[randomIndex] = temp;
+        }
+
+
+        for (int i = 0; i < blockList.blocks.Count; i++)
+        {
+            blockList.blocks[i].number = numbers[i];
         }
     }
 
@@ -108,6 +133,7 @@ public class GridManager : MonoBehaviour
         // Check if the game is finished and save results
         if (IsGameFinished())
         {
+            Debug.Log("Game is Finished!");
             SaveResults();
         }
     }
@@ -134,7 +160,7 @@ public class GridManager : MonoBehaviour
             totalTime = totalTime,
             totalClicks = totalClicks,
             pairs = pairs,
-            score = pairs / totalClicks * totalTime // Ajusta esta fórmula según sea necesario
+            score = pairs / totalClicks * totalTime 
         };
 
         string json = JsonUtility.ToJson(result);
@@ -147,7 +173,7 @@ public class GridManager : MonoBehaviour
     {
         float totalTime = Time.time - startTime;
         int pairs = blockList.blocks.Count / 2;
-        float score = pairs / (float)totalClicks * totalTime; // Ajusta esta fórmula según sea necesario
+        float score = pairs / (float)totalClicks * totalTime; 
 
         var result = new
         {

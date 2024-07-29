@@ -3,29 +3,23 @@ using UnityEngine.UI;
 
 public class GameTimer : MonoBehaviour
 {
-    public Text timerText; 
+    public Text timerText;
+    public bool isPaused;
     private float elapsedTime;
-    private bool paused;
 
     void Start()
     {
-        paused = true; 
+        isPaused = true;
         elapsedTime = 0f;
-        UpdateTimerText();
     }
 
     void Update()
     {
-        if (!paused)
+        if (!isPaused)
         {
             elapsedTime += Time.deltaTime;
             UpdateTimerText();
         }
-    }
-
-    public void SetPaused(bool isPaused)
-    {
-        paused = isPaused;
     }
 
     private void UpdateTimerText()
@@ -33,5 +27,10 @@ public class GameTimer : MonoBehaviour
         int minutes = Mathf.FloorToInt(elapsedTime / 60F);
         int seconds = Mathf.FloorToInt(elapsedTime % 60F);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
+    public void TogglePause()
+    {
+        isPaused = !isPaused;
     }
 }

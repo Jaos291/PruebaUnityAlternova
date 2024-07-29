@@ -9,9 +9,10 @@ public class GameController : MonoBehaviour
 
     //Game References
     [SerializeField] private GridManager _gridManager;
+    [SerializeField] private GameObject[] _gameObjects;
 
     //Game Variables to access anywhere
-    [HideInInspector] public bool canPlay = true;
+    [HideInInspector] public bool canPlay;
     [HideInInspector] public GridManager gridManager;
     [HideInInspector] public States state;
 
@@ -32,19 +33,12 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         gridManager = _gridManager;
-        canPlay = true;
+        canPlay = false;
     }
 
-    private void GameStateChanger()
+    public void GameStateChanger(bool enableGame)
     {
-        if (!canPlay)
-        {
-            canPlay = true;
-        }
-        else
-        {
-            canPlay = false;
-        }
+        canPlay = enableGame;
     }
 
     public enum States
