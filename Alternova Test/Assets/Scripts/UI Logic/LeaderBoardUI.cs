@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class LeaderBoardUI : MonoBehaviour
 {
@@ -26,8 +27,9 @@ public class LeaderBoardUI : MonoBehaviour
         foreach (LeaderboardEntry entry in entries)
         {
             GameObject entryObject = Instantiate(leaderboardEntryPrefab, leaderboardContainer);
-            entryObject.transform.Find("NameText").GetComponent<Text>().text = entry.playerName;
-            entryObject.transform.Find("ScoreText").GetComponent<Text>().text = entry.score.ToString("F2");
+            entryObject.GetComponent<TextMeshProUGUI>().text = entry.playerName + " - " + entry.score; 
+            //entryObject.transform.Find("NameText").GetComponent<Text>().text = entry.playerName;
+            //entryObject.transform.Find("ScoreText").GetComponent<Text>().text = entry.score.ToString("F2");
         }
     }
 
