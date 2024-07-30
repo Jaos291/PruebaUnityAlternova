@@ -49,7 +49,7 @@ public class GridManager : MonoBehaviour
 
         if (ValidateBlocks())
         {
-            ShuffleBlocks();
+            //ShuffleBlocks();
             GenerateGrid();
         }
         else
