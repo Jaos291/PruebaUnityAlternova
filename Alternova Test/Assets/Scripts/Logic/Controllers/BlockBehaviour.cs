@@ -9,6 +9,7 @@ public class BlockBehaviour : MonoBehaviour
     public int number;
     public bool isRevealed = false;
     [SerializeField] private AudioClip _clickClip;
+    [SerializeField] private Sprite[] _sprites;
 
     public void Setup(int num)
     {
@@ -28,6 +29,7 @@ public class BlockBehaviour : MonoBehaviour
 
             SFXManager.Instance.PlaySFXClip(_clickClip);
             GameController.Instance.gridManager.BlockRevealed(this);
+            button.image.sprite = _sprites[1];
         }
         
     }
@@ -37,5 +39,6 @@ public class BlockBehaviour : MonoBehaviour
         isRevealed = false;
         image.enabled = false;
         numberText.text = "";
+        button.image.sprite = _sprites[0];
     }
 }

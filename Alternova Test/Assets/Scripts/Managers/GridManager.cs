@@ -47,8 +47,17 @@ public class GridManager : MonoBehaviour
     {
         startTime = Time.time;
         LoadBlocksFromJson();
-        ShuffleBlocks();
-        GenerateGrid();
+
+        if (ValidateBlocks())
+        {
+            ShuffleBlocks();
+            GenerateGrid();
+        }
+        else
+        {
+            Debug.LogError("Invalid data in JSON field, please verify fields");
+        }
+
     }
 
     void LoadBlocksFromJson()
@@ -63,6 +72,23 @@ public class GridManager : MonoBehaviour
         {
             Debug.LogError("Cannot find blocks.json file!");
         }
+    }
+
+    bool ValidateBlocks()
+    {
+        if (blockList == null || blockList.blocks == null || blockList.blocks.Count == 0)
+        {
+            return false;
+        }
+
+        foreach (Block block in blockList.blocks)
+        {
+            if (block == null || block.R < 1 || block.C < 1 || block.number < 0 || block.number > 9)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     void ShuffleBlocks()
@@ -175,6 +201,9 @@ public class GridManager : MonoBehaviour
         _levelCompletedMessage.text = "LEVEL COMPLETED!";
 
         yield return new WaitForSeconds(3);
+
+        _levelCompletedMessage.text = "";
+
         GameController.Instance.saveScore.SetActive(true);
         GameController.Instance.mainThemeAudioSource.clip = _EndingTheme;
         GameController.Instance.mainThemeAudioSource.Play();
@@ -200,7 +229,6 @@ public class GridManager : MonoBehaviour
         string json = JsonUtility.ToJson(result);
         string path = Path.Combine(Application.persistentDataPath, "results.json");
         File.WriteAllText(path, json);
-        Debug.Log("Results saved: " + json);
 
         // Solicitar el nombre del jugador (puede ser a través de una ventana de diálogo o un input field)
         string playerName = _inputField.text; // Reemplaza esto con el método adecuado para obtener el nombre del jugador
@@ -231,7 +259,6 @@ public class GridManager : MonoBehaviour
         string json = JsonUtility.ToJson(result);
         string path = Path.Combine(Application.persistentDataPath, "results.json");
         File.WriteAllText(path, json);
-        Debug.Log("Results saved: " + json);
     }
 
 }

@@ -28,8 +28,6 @@ public class LeaderBoardUI : MonoBehaviour
         {
             GameObject entryObject = Instantiate(leaderboardEntryPrefab, leaderboardContainer);
             entryObject.GetComponent<TextMeshProUGUI>().text = entry.playerName + " - " + entry.score; 
-            //entryObject.transform.Find("NameText").GetComponent<Text>().text = entry.playerName;
-            //entryObject.transform.Find("ScoreText").GetComponent<Text>().text = entry.score.ToString("F2");
         }
     }
 
