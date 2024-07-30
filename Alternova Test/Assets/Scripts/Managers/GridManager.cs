@@ -28,6 +28,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private GameTimer _gameTimer;
     [SerializeField] private TMP_InputField _inputField;
     [SerializeField] private TextMeshProUGUI _levelCompletedMessage;
+    [SerializeField] private TextMeshProUGUI _finalScore;
 
     public GameObject blockPrefab;
     public Sprite[] images;
@@ -42,6 +43,7 @@ public class GridManager : MonoBehaviour
     private BlockBehaviour secondRevealed;
     private int totalClicks;
     private float startTime;
+    private float finalScore;
 
     void Start()
     {
@@ -198,15 +200,29 @@ public class GridManager : MonoBehaviour
             child.gameObject.SetActive(false);
         }
 
+        finalScore = CalculateScore();
+
+        _finalScore.text = "Your Score: " + finalScore.ToString();
+
         _levelCompletedMessage.text = "LEVEL COMPLETED!";
 
         yield return new WaitForSeconds(3);
 
         _levelCompletedMessage.text = "";
 
+        GameController.Instance.leaderboard.SetActive(true);
         GameController.Instance.saveScore.SetActive(true);
         GameController.Instance.mainThemeAudioSource.clip = _EndingTheme;
         GameController.Instance.mainThemeAudioSource.Play();
+    }
+
+    private float CalculateScore()
+    {
+        float totalTime = Time.time - startTime;
+        int pairs = blockList.blocks.Count / 2;
+        float score = pairs / (float)totalClicks * totalTime;
+
+        return score;
     }
 
 
@@ -216,7 +232,7 @@ public class GridManager : MonoBehaviour
 
         float totalTime = Time.time - startTime;
         int pairs = blockList.blocks.Count / 2;
-        float score = pairs / (float)totalClicks * totalTime;
+        float score = finalScore;
 
         var result = new
         {
@@ -253,7 +269,7 @@ public class GridManager : MonoBehaviour
             totalTime = totalTime,
             totalClicks = totalClicks,
             pairs = pairs,
-            score = pairs / totalClicks * totalTime 
+            score = finalScore
         };
 
         string json = JsonUtility.ToJson(result);

@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
 
     public AudioSource mainThemeAudioSource;    
     public GameObject saveScore;
+    public GameObject leaderboard;
 
     private void Awake()
     {
@@ -29,7 +30,7 @@ public class GameController : MonoBehaviour
             Destroy(gameObject);
         }
 
-        DontDestroyOnLoad(this);
+        //DontDestroyOnLoad(this);
     }
 
     private void Start()

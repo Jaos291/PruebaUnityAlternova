@@ -40,6 +40,12 @@ public class LeaderBoardManager : MonoBehaviour
         File.WriteAllText(leaderboardFilePath, json);
     }
 
+    public void ClearLeaderboard()
+    {
+        leaderboard.entries.Clear();
+        SaveLeaderboard();
+    }
+
     public List<LeaderboardEntry> GetEntries()
     {
         return leaderboard.entries;

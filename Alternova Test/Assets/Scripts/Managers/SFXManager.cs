@@ -21,7 +21,7 @@ public class SFXManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        DontDestroyOnLoad(this);
+        //DontDestroyOnLoad(this);
     }
 
     public void PlaySFXClip(AudioClip audioClip)

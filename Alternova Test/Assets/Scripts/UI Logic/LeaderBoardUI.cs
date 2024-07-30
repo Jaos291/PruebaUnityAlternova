@@ -12,8 +12,14 @@ public class LeaderBoardUI : MonoBehaviour
 
     void Start()
     {
+        
+    }
+
+    private void OnEnable()
+    {
         leaderboardManager = FindObjectOfType<LeaderBoardManager>();
         DisplayLeaderboard();
+        
     }
 
     public void DisplayLeaderboard()
@@ -24,6 +30,8 @@ public class LeaderBoardUI : MonoBehaviour
         }
 
         List<LeaderboardEntry> entries = leaderboardManager.GetEntries();
+
+
         foreach (LeaderboardEntry entry in entries)
         {
             GameObject entryObject = Instantiate(leaderboardEntryPrefab, leaderboardContainer);
