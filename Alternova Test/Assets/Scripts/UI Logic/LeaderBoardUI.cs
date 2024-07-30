@@ -10,11 +10,6 @@ public class LeaderBoardUI : MonoBehaviour
 
     private LeaderBoardManager leaderboardManager;
 
-    void Start()
-    {
-        
-    }
-
     private void OnEnable()
     {
         leaderboardManager = FindObjectOfType<LeaderBoardManager>();

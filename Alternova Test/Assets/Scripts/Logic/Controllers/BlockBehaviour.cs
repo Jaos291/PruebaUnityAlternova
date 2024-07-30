@@ -3,13 +3,19 @@ using UnityEngine.UI;
 
 public class BlockBehaviour : MonoBehaviour
 {
+    [SerializeField] private AudioClip _clickClip;
+    [SerializeField] private Sprite[] _sprites;
+
     public Text numberText;
     public Image image;
     public Button button;
     public int number;
     public bool isRevealed = false;
-    [SerializeField] private AudioClip _clickClip;
-    [SerializeField] private Sprite[] _sprites;
+
+    private void Awake()
+    {
+        SetupButton();
+    }
 
     public void Setup(int num)
     {
@@ -24,19 +30,12 @@ public class BlockBehaviour : MonoBehaviour
 
     public void OnClick()
     {
-        if (GameController.Instance.canPlay)
-        {
-            if (isRevealed) return;
+        if (!GameController.Instance.canPlay || isRevealed) return;
 
-            isRevealed = true;
-            image.enabled = true;
-            numberText.text = number.ToString();
-
-            SFXManager.Instance.PlaySFXClip(_clickClip);
-            GameController.Instance.gridManager.BlockRevealed(this);
-            button.image.sprite = _sprites[1];
-        }
-        
+        RevealBlock();
+        SFXManager.Instance.PlaySFXClip(_clickClip);
+        GameController.Instance.gridManager.BlockRevealed(this);
+        button.image.sprite = _sprites[1];
     }
 
     public void Hide()
@@ -45,5 +44,17 @@ public class BlockBehaviour : MonoBehaviour
         image.enabled = false;
         numberText.text = "";
         button.image.sprite = _sprites[0];
+    }
+
+    private void SetupButton()
+    {
+        button.onClick.AddListener(OnClick);
+    }
+
+    private void RevealBlock()
+    {
+        isRevealed = true;
+        image.enabled = true;
+        numberText.text = number.ToString();
     }
 }

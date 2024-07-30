@@ -21,7 +21,6 @@ public class BlockList
 
 public class GridManager : MonoBehaviour
 {
-
     [SerializeField] private AudioClip _incorrectPair;
     [SerializeField] private AudioClip _correctPair;
     [SerializeField] private AudioClip _EndingTheme;
@@ -29,24 +28,21 @@ public class GridManager : MonoBehaviour
     [SerializeField] private TMP_InputField _inputField;
     [SerializeField] private TextMeshProUGUI _levelCompletedMessage;
     [SerializeField] private TextMeshProUGUI _finalScore;
-
-    public GameObject blockPrefab;
-    public Sprite[] images;
-    public int rows = 4;
-    public int columns = 3;
-    public float blockSpacing = 1.5f;
-    public string pathTest;
+    [SerializeField] private GameObject blockPrefab;
+    [SerializeField] private Sprite[] images;
+    [SerializeField] private int rows = 4;
+    [SerializeField] private int columns = 3;
+    [SerializeField] private float blockSpacing = 1.5f;
 
     private BlockList blockList;
     private List<GameObject> blocks = new List<GameObject>();
-
     private BlockBehaviour firstRevealed;
     private BlockBehaviour secondRevealed;
     private int totalClicks;
     private float startTime;
     private float finalScore;
 
-    void Start()
+    private void Start()
     {
         startTime = Time.time;
         LoadBlocksFromJson();
@@ -60,10 +56,9 @@ public class GridManager : MonoBehaviour
         {
             Debug.LogError("Invalid data in JSON field, please verify fields");
         }
-
     }
 
-    void LoadBlocksFromJson()
+    private void LoadBlocksFromJson()
     {
         string path = Path.Combine(Application.streamingAssetsPath, "blocks.json");
         if (File.Exists(path))
@@ -77,7 +72,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    bool ValidateBlocks()
+    private bool ValidateBlocks()
     {
         if (blockList == null || blockList.blocks == null || blockList.blocks.Count == 0)
         {
@@ -94,14 +89,13 @@ public class GridManager : MonoBehaviour
         return true;
     }
 
-    void ShuffleBlocks()
+    private void ShuffleBlocks()
     {
         List<int> numbers = new List<int>();
         foreach (Block block in blockList.blocks)
         {
             numbers.Add(block.number);
         }
-
 
         for (int i = 0; i < numbers.Count; i++)
         {
@@ -111,22 +105,22 @@ public class GridManager : MonoBehaviour
             numbers[randomIndex] = temp;
         }
 
-
         for (int i = 0; i < blockList.blocks.Count; i++)
         {
             blockList.blocks[i].number = numbers[i];
         }
     }
 
-    void GenerateGrid()
+    private void GenerateGrid()
     {
         foreach (Block block in blockList.blocks)
         {
             GameObject blockObject = Instantiate(blockPrefab);
             blockObject.transform.SetParent(this.gameObject.transform);
-            blockObject.GetComponent<BlockBehaviour>().image.sprite = images[block.number];
-            blockObject.GetComponent<BlockBehaviour>().image.enabled = false;
-            blockObject.GetComponent<BlockBehaviour>().Setup(block.number);
+            BlockBehaviour blockBehaviour = blockObject.GetComponent<BlockBehaviour>();
+            blockBehaviour.image.sprite = images[block.number];
+            blockBehaviour.image.enabled = false;
+            blockBehaviour.Setup(block.number);
             blocks.Add(blockObject);
         }
     }
@@ -226,11 +220,8 @@ public class GridManager : MonoBehaviour
         return score;
     }
 
-
     public void SaveResultsJSON()
     {
-        SaveResults();
-
         float totalTime = Time.time - startTime;
         int pairs = blockList.blocks.Count / 2;
         float score = finalScore;
@@ -247,42 +238,23 @@ public class GridManager : MonoBehaviour
         string path = Path.Combine(Application.persistentDataPath, "results.json");
         File.WriteAllText(path, json);
 
-        // Solicitar el nombre del jugador (puede ser a través de una ventana de diálogo o un input field)
-        string playerName = _inputField.text; // Reemplaza esto con el método adecuado para obtener el nombre del jugador
+        // Request player name through input field
+        string playerName = _inputField.text; // Replace this with the appropriate method to get the player name
 
-        if (playerName.Equals("") || playerName == null)
+        if (string.IsNullOrEmpty(playerName))
         {
             playerName = "Player";
         }
 
-        // Añadir la entrada al leaderboard
+        // Add entry to leaderboard
         LeaderBoardManager leaderboardManager = FindObjectOfType<LeaderBoardManager>();
         leaderboardManager.AddEntry(playerName, score);
-    }
-
-    private void SaveResults()
-    {
-        float totalTime = Time.time - startTime;
-        int pairs = blockList.blocks.Count / 2;
-
-        var result = new
-        {
-            totalTime = totalTime,
-            totalClicks = totalClicks,
-            pairs = pairs,
-            score = finalScore
-        };
-
-        string json = JsonUtility.ToJson(result);
-        string path = Path.Combine(Application.persistentDataPath, "results.json");
-        File.WriteAllText(path, json);
     }
 
     //---------------------------------
     public void UnitTesting()
     {
         string path = Path.Combine(Application.streamingAssetsPath, "blocksTest.json");
-        pathTest = path;
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
@@ -290,8 +262,7 @@ public class GridManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Cannot find blocks.json file!");
+            Debug.LogError("Cannot find blocksTest.json file!");
         }
     }
-
 }

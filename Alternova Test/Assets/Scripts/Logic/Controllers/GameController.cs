@@ -1,42 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    //Singleton
-    public static GameController Instance;
+    // Singleton instance
+    public static GameController Instance { get; private set; }
 
-    //Game References
+    // Game References
     [SerializeField] private GridManager _gridManager;
     [SerializeField] private GameObject[] _gameObjects;
 
-    //Game Variables to access anywhere
+    // Game Variables accessible anywhere
     [HideInInspector] public bool canPlay;
     [HideInInspector] public GridManager gridManager;
 
-    public AudioSource mainThemeAudioSource;    
+    public AudioSource mainThemeAudioSource;
     public GameObject saveScore;
     public GameObject leaderboard;
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
-        //DontDestroyOnLoad(this);
+        SetupSingleton();
     }
 
     private void Start()
     {
-        gridManager = _gridManager;
-        canPlay = false;
+        InitializeGame();
     }
 
     public void GameStateChanger(bool enableGame)
@@ -47,5 +35,23 @@ public class GameController : MonoBehaviour
     public void SaveScore()
     {
         gridManager.SaveResultsJSON();
+    }
+
+    private void SetupSingleton()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void InitializeGame()
+    {
+        gridManager = _gridManager;
+        canPlay = false;
     }
 }
