@@ -35,6 +35,7 @@ public class GridManager : MonoBehaviour
     public int rows = 4;
     public int columns = 3;
     public float blockSpacing = 1.5f;
+    public string pathTest;
 
     private BlockList blockList;
     private List<GameObject> blocks = new List<GameObject>();
@@ -275,6 +276,22 @@ public class GridManager : MonoBehaviour
         string json = JsonUtility.ToJson(result);
         string path = Path.Combine(Application.persistentDataPath, "results.json");
         File.WriteAllText(path, json);
+    }
+
+    //---------------------------------
+    public void UnitTesting()
+    {
+        string path = Path.Combine(Application.streamingAssetsPath, "blocksTest.json");
+        pathTest = path;
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            blockList = JsonUtility.FromJson<BlockList>(json);
+        }
+        else
+        {
+            Debug.LogError("Cannot find blocks.json file!");
+        }
     }
 
 }

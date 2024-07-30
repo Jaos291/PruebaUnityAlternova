@@ -17,6 +17,11 @@ public class BlockBehaviour : MonoBehaviour
         numberText.text = "";
     }
 
+    public void UnitTestForSetup()
+    {
+        number = 0;
+    }
+
     public void OnClick()
     {
         if (GameController.Instance.canPlay)
