@@ -22,7 +22,7 @@ Features
 Getting Started
 ---
 Prerequisites
-Unity 2020.3 or later
+Unity 2021.3.35f1
 
 //
 *Contributing*
